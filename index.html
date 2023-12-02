@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="./style.css">
+<title>Weather App</title>
+<style>
+    body {
+        background-image: url('https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.JgYlZPN-VhEW3AftAwK5BwHaEK%26pid%3DApi&f=1&ipt=7816b2e41e1a8e5edd1127245de3ee2e331e14d15d1fad8a1c7d53189af1b018&ipo=images');
+        background-repeat: no-repeat;
+        background-size: cover;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    #main {
+        padding: 20px;
+        border-radius: 5px;
+        
+    }
+
+    input {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        background-color: azure;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+    }
+
+    button {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        background-color: azure;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+    .weather{
+        position:absolute;
+        top: 0%;
+        left: 0%;
+    }
+
+    h1 {
+        color: rgb(55, 54, 54);
+        text-align: center;
+    }
+
+    p {
+        color: rgb(18, 17, 17);
+        text-align: center;
+    }
+</style>
+</head>
+<body>
+
+<div id="main">
+    <div>
+        <h1 class="weather">Weather update</h1>
+    </div>
+  <div id="toggle">
+    <input type="text" id="city" placeholder="Enter city name">
+        <button onclick="fetchWeather()">Fetch Weather</button>
+    </div>
+	<div>
+    <h1 id="city-name"></h1>
+    <p id="country"></p>
+    <p id="temperature"></p>
+    <p id="humidity"></p>
+    <p id="wind-speed"></p>
+    <p id="description"></p>
+     </div>
+</div>
+
+<script>
+    // Add JavaScript code here
+    async function fetchWeather() {
+		document.getElementById('toggle').style.display = 'none';
+        const city = document.getElementById('city').value;
+        const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=8ac5c4d57ba6a4b3dfcf622700447b1e&units=metric`;
+
+        try {
+            const response = await fetch(apiUrl);
+            const data = await response.json();
+
+            displayWeather(data);
+        } catch (error) {
+            console.error('Error fetching weather data:', error);
+        }
+    }
+    function displayWeather(data) {
+        const cityName = document.getElementById('city-name');
+        const country = document.getElementById('country');
+        const temperature = document.getElementById('temperature');
+        const humidity = document.getElementById('humidity');
+        const windSpeed = document.getElementById('wind-speed');
+        const description = document.getElementById('description');
+
+        cityName.textContent = data.name;
+        country.textContent = `Country : ${data.sys.country}`;
+        temperature.textContent = `Temperature: ${data.main.temp}°C`;
+        humidity.textContent = `Humidity: ${data.main.humidity}%`;
+        windSpeed.textContent = `Wind Speed: ${data.wind.speed} m/s`;
+        description.textContent = `Description: ${data.weather[0].description}`;
+    }
+</script>
+
+</body>
+</html>
